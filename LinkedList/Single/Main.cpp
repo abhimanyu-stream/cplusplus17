@@ -17,8 +17,12 @@ int main()
     list.showList();
     list.addAsLastNode(600);
     list.showList();
-    list.sortListAscending(list.getListPointerAccess());
+    list.sortListAscending();
     list.showList();
+    LinkedList *updateListAfterDeletionOfNode = list.remove(30);
+    updateListAfterDeletionOfNode->showList();
+    LinkedList *reveredList = list.reverseList();
+    reveredList->showList();
 
     return 0;
 }

@@ -17,14 +17,17 @@ private:
 
 public:
     LinkedList();
+    LinkedList(Node node);
     ~LinkedList();
     void insert(int value);
-    void remove(int value);
+    LinkedList *remove(int value);
     void showList() const;
     void addAsFirstNode(int value);
     void addAfterNode(int valueOfCurrentNode, int value);
     void addAsLastNode(int value);
-    Node *sortListAscending(Node *head);
+    LinkedList *reverseList();
+    LinkedList *setListPointerAccess(Node *head);
+    Node *sortListAscending();
     Node *sortListDescending(Node *head);
     Node *getListPointerAccess();
     Node *findNodePointerAccess(int value);

@@ -154,8 +154,9 @@ void LinkedList::addAsLastNode(int value)
         std::cout << "Added " << value << " as the last node." << std::endl;
     }
 }
-Node *LinkedList::sortListAscending(Node *head)
+Node *LinkedList::sortListAscending()
 {
+    Node *head = LinkedList::getListPointerAccess(); // check it
     if (head == nullptr)
     {
         std::cout << "List is Empty" << std::endl;
@@ -197,6 +198,50 @@ Node *LinkedList::sortListAscending(Node *head)
     } while (swapped); // Continue until no swaps occur in a full pass
 
     return head;
+}
+LinkedList *LinkedList::remove(int value)
+{
+    Node *head = LinkedList::getListPointerAccess();
+    Node *current = head;
+    Node *previous = nullptr; // Pointer to track the previous node
+
+    // Check if the list is empty
+    if (head == nullptr)
+    {
+        std::cout << "List is Empty. Nothing to delete." << std::endl;
+        return this;
+    }
+
+    // Traverse the list to find the node to delete
+    while (current != nullptr)
+    {
+        if (current->data == value)
+        {
+            // Case 1: Node to delete is the head
+            if (current == head)
+            {
+                head = current->next;       // Move head to the next node
+                delete current;             // Free memory for the head node
+                setListPointerAccess(head); // Update the head in the linked list
+                std::cout << "Node with value " << value << " deleted from the List." << std::endl;
+                return this; // Return after deletion
+            }
+
+            // Case 2: Node to delete is not the head
+            previous->next = current->next; // Bypass the current node [ Node having data is 12 its next is now pointed by previous. this Node is having data 30]
+            delete current;                 // Free memory
+            std::cout << "Node with value " << value << " deleted from the List." << std::endl;
+            return this; // Return after deletion
+        }
+
+        // Move pointers forward
+        previous = current;      // Move previous to the current node  // [previous is 10, then 12]
+        current = current->next; // Move current to the next node
+    }
+
+    // If the node is not found
+    std::cout << "Node with value " << value << " not found in the List." << std::endl;
+    return this;
 }
 
 /**
@@ -289,6 +334,8 @@ For a list of size n, it can take up to n-1 passes.
  */
 Node *LinkedList::sortListDescending(Node *head)
 {
+
+    // implement it
     return head;
 }
 Node *LinkedList::getListPointerAccess()
@@ -297,5 +344,119 @@ Node *LinkedList::getListPointerAccess()
 }
 Node *LinkedList::findNodePointerAccess(int value)
 {
+    // find Node whose data is equal to value and return Node *
     return head;
 }
+LinkedList *LinkedList::reverseList()
+{
+    Node *head = getListPointerAccess();
+
+    // point  to last Node
+    if (head == nullptr)
+    {
+        std::cout << "List is Empty.." << std::endl;
+        return this;
+    }
+    if (head->next == nullptr)
+    {
+        std::cout << "Only One Node is List, No need to reverse List " << std::endl;
+        return this;
+    }
+    Node *current = head;
+    Node *next = nullptr;
+    Node *previous = nullptr;
+    // head=>4->7->8->NULL
+    // while (current->next != nullptr) the last is skipped by by this condition
+    while (current != nullptr)
+    {
+        // current is Node 1
+        next = current->next;     // next is Node 2
+        current->next = previous; // Node 1->Null
+        previous = current;       // previous= Node 1
+        current = next;           // current = Node 2
+    }
+    // std::cout << "last Node data" << temp->data;
+    head = previous;
+    setListPointerAccess(head); // Update the internal head pointer in the LinkedList object
+
+    return this;
+}
+LinkedList *LinkedList::setListPointerAccess(Node *updatedHead)
+{
+    this->head = updatedHead;
+    return this;
+}
+/**
+Here’s a step-by-step explanation of how the while loop works in the reverseList function to reverse a singly linked list:
+
+Initial State:
+The linked list starts with:
+head pointing to the first node of the list.
+prev initialized to nullptr (this will eventually point to the reversed list).
+current pointing to the first node of the original list (same as head).
+next is uninitialized (to be used for temporarily storing the next node).
+Execution of the while Loop:
+Iteration 1:
+Before Execution:
+
+current points to the first node (Node1).
+prev is nullptr.
+next is uninitialized.
+Inside the Loop:
+
+next = current->next: Store the address of the second node (Node2) in next.
+current->next = prev: Reverse the link by pointing the first node's next to nullptr (the value of prev).
+prev = current: Move prev to point to the first node (Node1).
+current = next: Move current to the second node (Node2).
+After Execution:
+
+current points to Node2.
+prev points to Node1, and Node1->next is nullptr.
+The partially reversed list is Node1 -> nullptr.
+Iteration 2:
+Before Execution:
+
+current points to Node2.
+prev points to Node1.
+next holds the address of Node2.
+Inside the Loop:
+
+next = current->next: Store the address of the third node (Node3) in next.
+current->next = prev: Reverse the link by pointing the second node's next to Node1.
+prev = current: Move prev to point to the second node (Node2).
+current = next: Move current to the third node (Node3).
+After Execution:
+
+current points to Node3.
+prev points to Node2, and Node2->next points to Node1.
+The partially reversed list is Node2 -> Node1 -> nullptr.
+Iteration 3 (and so on):
+The loop continues until all nodes are reversed. For each iteration:
+
+current moves forward to the next node in the original list.
+prev moves forward to the current node in the reversed list.
+The current->next pointer is reversed to point to prev.
+Final Iteration:
+When current becomes nullptr, it means the end of the original list is reached.
+prev now points to the last node of the original list, which is the new head of the reversed list.
+After the Loop:
+head = prev: Update the head pointer to the new front of the list.
+The entire list is reversed, and the function returns the new head.
+Illustrative Example:
+For a list 1 -> 2 -> 3 -> nullptr:
+
+After Iteration 1: 1 -> nullptr, prev points to 1.
+After Iteration 2: 2 -> 1 -> nullptr, prev points to 2.
+After Iteration 3: 3 -> 2 -> 1 -> nullptr, prev points to 3.
+prev now represents the reversed list, and head is updated to point to it.
+
+setListPointerAccess(head); // Update the internal head pointer in the LinkedList object
+
+return this;
+LinkedList *LinkedList::setListPointerAccess(Node *updatedHead)
+{
+    this->head = updatedHead;
+    return this;
+}
+
+*/

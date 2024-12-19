@@ -1,3 +1,1 @@
-"# cplusplus17" 
-"# c-17" 
-"# cplusplus17" 
+# cpp17
